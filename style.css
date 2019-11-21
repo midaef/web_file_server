@@ -1,0 +1,23 @@
+.dir a {
+	color: black;
+	text-decoration:none;
+	padding-top: 12px;
+	margin-left: 50px;
+	font-size: 23px;
+	display: block;
+}
+
+.dir a:hover {
+	color: #95500c;
+}
+
+.dir h3 {
+	margin-left: 50px;
+	font-size: 24px;
+}
+
+.path h3 {
+	color: #2c3136;
+	margin-left: 50px;
+	font-size: 25px;
+}

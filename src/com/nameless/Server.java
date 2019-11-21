@@ -17,8 +17,9 @@ public class Server {
 	public void start() {
 		try {
 			InetAddress address = InetAddress.getByName("::1");
-			ServerSocket serverSocket = new ServerSocket(62226, 50, address);
+			ServerSocket serverSocket = new ServerSocket(52225, 50, address);
 			System.out.println("[SERVER STARTED]");
+			//try {serverSocket = new ServerSocket(52225);} catch (Exception e) {} It's not local
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -33,9 +34,14 @@ public class Server {
 	}
 
 	private String getRequest(String line, ServerSocket server, Socket socket, Page page) {
-		String index = "";
-		index = page.createIndexPage();
-		return index;
+		if (line.startsWith("GET /style.css")) {
+			String indexCSS = page.readFile("style.css");
+			return indexCSS;
+		} else if (line.startsWith("GET /script.js")) {
+			String scriptJS = page.readFile("script.js");
+			return scriptJS;
+		}
+		return page.createIndexPage();
 	}
 
 	private void sendRequest(Socket socket, String req) {

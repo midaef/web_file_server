@@ -18,16 +18,17 @@ public class Page {
 		for (String i : dirList) {
 			j++;
 			if (dirList.size() != j) {
-				index = index.replace("&file&", "<a href=\\\"javascript:void(0);\\\">" +
-						"<span class=\\\"open-dir\\\">" + i + "</span></a><br>&file&")
-						.replace("&title&", userName);
+				index = index.replace("&file&", "<a href=\"javascript:void(0);\">" +
+						"<span class=\"open-dir\">" + i + "</span></a>&file&")
+						.replace("&title&", userName)
+						.replace("&path&", "<h3>" + "Your directory: " + userName + "</h3>");
 			} else {index = index.replace("&file&", "");}
 		}
 
 		return index;
 	}
 
-	private String readFile(String fileName) {
+	public String readFile(String fileName) {
 		String txt = "";
 		try {
 			File file = new File(fileName);
