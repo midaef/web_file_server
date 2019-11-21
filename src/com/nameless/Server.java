@@ -25,12 +25,26 @@ public class Server {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
 					Page page = new Page();
+					parser(line);
 					String request = getRequest(line, serverSocket, socket, page);
 					sendRequest(socket, request);
-
 				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
+	}
+
+	private void parser(String line) {
+		if (line.contains("?") && !line.endsWith("?")) {
+			String reqGet = line.split("\\?")[1];
+			String[] dataArray = reqGet.split("&");
+			String[] data;
+			String dirName = "";
+			for (String str : dataArray) {
+				data = str.split("=");
+				dirName = data[1];
+			}
+			System.out.println(dirName);
+		}
 	}
 
 	private String getRequest(String line, ServerSocket server, Socket socket, Page page) {
