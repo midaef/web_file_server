@@ -11,14 +11,19 @@ public class Page {
 	public Page() {}
 
 	public String createIndexPage() {
-		getMainDir();
+		String userName = getMainDir();
 		String index = readFile("index.html");
 		String dir = "";
+		int j = 0;
 		for (String i : dirList) {
-			dir+=i + " ";
-
+			j++;
+			if (dirList.size() != j) {
+				index = index.replace("&file&", "<a href=\\\"javascript:void(0);\\\">" +
+						"<span class=\\\"open-dir\\\">" + i + "</span></a><br>&file&")
+						.replace("&title&", userName);
+			} else {index = index.replace("&file&", "");}
 		}
-		index = index.replace("&file&", "<p>" + dir + "</p>");
+
 		return index;
 	}
 
@@ -34,18 +39,19 @@ public class Page {
 		return txt;
 	}
 
-	public void getMainDir() {
+	public String getMainDir() {
 		String OS = "";
 		OS = System.getProperty("os.name");
-		String username = System.getProperty("user.name");
+		String userName = System.getProperty("user.name");
 		File dir;
-		if (OS.startsWith("Mac")) {dir = new File("/Users/" + username); }
-		else {dir = new File("C:\\Users\\" + username);}
+		if (OS.startsWith("Mac")) {dir = new File("/Users/" + userName); }
+		else {dir = new File("C:\\Users\\" + userName);}
 		for (File file : dir.listFiles()) {
 			if (!file.getName().startsWith(".") && !dirList.contains(file.getName())) {
 				dirList.add(file.getName());
 			}
 		}
+		return dir.getPath();
 	}
 
 }

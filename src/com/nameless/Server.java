@@ -23,7 +23,6 @@ public class Server {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
-					System.out.println(line);
 					Page page = new Page();
 					String request = getRequest(line, serverSocket, socket, page);
 					sendRequest(socket, request);
