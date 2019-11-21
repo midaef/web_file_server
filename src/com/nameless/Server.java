@@ -1,17 +1,14 @@
 package com.nameless;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
-public class Server extends Thread {
+public class Server {
 
 	private Boolean shutdown = false;
-	private ArrayList<String> dirList = new ArrayList<>();
 
 	public Server() {
 		start();
@@ -25,31 +22,28 @@ public class Server extends Thread {
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String line = reader.readLine().replace("GET /?", "")
-													.replace(" HTTP/1.1", "");
-					Runnable run = ()-> getDir();
-					Thread thread = new Thread(run);
-					thread.start();
-					String httpResponse = "HTTP/1.1 200 OK\r\n\r\n";
-					socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
+					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
+					System.out.println(line);
+					Page page = new Page();
+					String request = getRequest(line, serverSocket, socket, page);
+					sendRequest(socket, request);
 
 				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
 	}
 
-	private void getDir() {
-		String OS = "";
-		OS = System.getProperty("os.name");
-		String username = System.getProperty("user.name");
-		File dir;
-		if (OS.startsWith("Mac")) {dir = new File("/Users/" + username); }
-		else {dir = new File("C:\\Users\\" + username);}
-		for (File file : dir.listFiles()) {
-			if (!file.getName().startsWith(".") && !dirList.contains(file.getName())) {
-				dirList.add(file.getName());
-			}
-		}
+	private String getRequest(String line, ServerSocket server, Socket socket, Page page) {
+		String index = "";
+		index = page.createIndexPage();
+		return index;
+	}
+
+	private void sendRequest(Socket socket, String req) {
+		try {
+			String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + req;
+			socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
+		} catch (Exception ignored) {ignored.printStackTrace();}
 	}
 
 }
