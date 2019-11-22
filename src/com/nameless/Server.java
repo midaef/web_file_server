@@ -9,6 +9,7 @@ import java.net.Socket;
 public class Server {
 
 	private Boolean shutdown = false;
+	private Page page = new Page();
 
 	public Server() {
 		start();
@@ -24,16 +25,18 @@ public class Server {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
-					Page page = new Page();
-					parser(line);
-					String request = getRequest(line, serverSocket, socket, page);
+					System.out.println(line);
+					parser(line, socket);
+					String request = parser(line, socket);
 					sendRequest(socket, request);
+
+
 				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
 	}
 
-	private void parser(String line) {
+	private String parser(String line, Socket socket) {
 		if (line.contains("?") && !line.endsWith("?")) {
 			String reqGet = line.split("\\?")[1];
 			String[] dataArray = reqGet.split("&");
@@ -43,19 +46,20 @@ public class Server {
 				data = str.split("=");
 				dirName = data[1];
 			}
-			System.out.println(dirName);
-		}
-	}
-
-	private String getRequest(String line, ServerSocket server, Socket socket, Page page) {
-		if (line.startsWith("GET /style.css")) {
+			String directory = page.getMainDir(dirName, false);
+			String index = page.createIndexPage(directory);
+			return index;
+		} else if (line.startsWith("GET /style.css")) {
 			String indexCSS = page.readFile("style.css");
 			return indexCSS;
 		} else if (line.startsWith("GET /script.js")) {
 			String scriptJS = page.readFile("script.js");
 			return scriptJS;
+		} else if (line.equals("GET /")) {
+			String directory = page.getMainDir("", false);
+			return page.createIndexPage(directory);
 		}
-		return page.createIndexPage();
+		return "Page not found: 404";
 	}
 
 	private void sendRequest(Socket socket, String req) {

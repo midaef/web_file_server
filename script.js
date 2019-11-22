@@ -8,9 +8,7 @@ var i, list = document.getElementsByClassName("open-dir");
 			var xmlHttp = new XMLHttpRequest();
 			var currentLocation = window.location.href;
 			currentLocation = currentLocation + "?dir=" + dirName;
-			xmlHttp.open("GET", currentLocation, false ); // false for synchronous request
-			xmlHttp.send(null);
+			window.location.href = currentLocation;
 		}, false);
-   	// console.log(list[i].onclick());
    }
 };
