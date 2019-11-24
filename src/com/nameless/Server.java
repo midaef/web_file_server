@@ -25,7 +25,6 @@ public class Server {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
-					System.out.println(line);
 					parser(line, socket);
 					String request = parser(line, socket);
 					sendRequest(socket, request);
@@ -38,15 +37,8 @@ public class Server {
 
 	private String parser(String line, Socket socket) {
 		if (line.contains("?") && !line.endsWith("?")) {
-			String reqGet = line.split("\\?")[1];
-			String[] dataArray = reqGet.split("&");
-			String[] data;
-			String dirName = "";
-			for (String str : dataArray) {
-				data = str.split("=");
-				dirName = data[1];
-			}
-			String directory = page.getMainDir(dirName, false);
+			String dirName = splitRequest(line);
+			String directory = page.getMainDir(dirName);
 			String index = page.createIndexPage(directory);
 			return index;
 		} else if (line.startsWith("GET /style.css")) {
@@ -56,10 +48,20 @@ public class Server {
 			String scriptJS = page.readFile("script.js");
 			return scriptJS;
 		} else if (line.equals("GET /")) {
-			String directory = page.getMainDir("", false);
+			String directory = page.getMainDir("");
 			return page.createIndexPage(directory);
 		}
 		return "Page not found: 404";
+	}
+
+	private String splitRequest(String line) {
+		String[] request = line.split("\\?");
+		String dirName = "";
+		for (String str : request) {
+			dirName += str.replace("dir=", "").replace("GET /", "")
+					.replace("%20", " ") + "/";
+		}
+		return dirName;
 	}
 
 	private void sendRequest(Socket socket, String req) {

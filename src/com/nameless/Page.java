@@ -24,9 +24,7 @@ public class Page {
 						.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
 			} else {index = index.replace("&file&", "");}
 		}
-		System.out.println(index);
 		dirList.clear();
-		System.out.println(index);
 		return index;
 	}
 
@@ -46,7 +44,7 @@ public class Page {
 		return System.getProperty("user.name");
 	}
 
-	public String getMainDir(String directory, Boolean isUp) {
+	public String getMainDir(String directory) {
 		String OS = "";
 		OS = System.getProperty("os.name");
 		String userName = getUserName();
