@@ -12,3 +12,7 @@ var i, list = document.getElementsByClassName("open-dir");
 		}, false);
    }
 };
+
+function toDir() {
+	window.history.back(1);
+}
