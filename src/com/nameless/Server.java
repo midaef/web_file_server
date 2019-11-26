@@ -17,10 +17,9 @@ public class Server {
 
 	public void start() {
 		try {
-			InetAddress address = InetAddress.getByName("::1");
+			InetAddress address = InetAddress.getByName("::");
 			ServerSocket serverSocket = new ServerSocket(65000, 50, address);
 			System.out.println("[SERVER STARTED]");
-//			try {serverSocket = new ServerSocket(65000);} catch (Exception e) {}
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -30,7 +29,7 @@ public class Server {
 						String request = parser(line);
 						sendRequest(socket, request);
 					}
-				} catch (Exception ignored) {ignored.printStackTrace();}
+				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
 	}
@@ -63,7 +62,6 @@ public class Server {
 			directoryName += str.replace("dir=", "").replace("GET /", "")
 					.replace("%20", " ") + "/";
 		}
-		System.out.println(directoryName);
 		return directoryName;
 	}
 
@@ -71,7 +69,7 @@ public class Server {
 		try {
 			String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + req;
 			socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
-		} catch (Exception ignored) {ignored.printStackTrace();}
+		} catch (Exception ignored) {}
 	}
 
 }
