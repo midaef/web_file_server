@@ -27,8 +27,7 @@ public class Server {
 					String line = reader.readLine();
 					if (line != null) {
 						line = line.split("\n")[0].replace(" HTTP/1.1", "");
-						parser(line, socket);
-						String request = parser(line, socket);
+						String request = parser(line);
 						sendRequest(socket, request);
 					}
 				} catch (Exception ignored) {ignored.printStackTrace();}
@@ -36,11 +35,13 @@ public class Server {
 		} catch (Exception e) {e.printStackTrace();}
 	}
 
-	private String parser(String line, Socket socket) {
+	private String parser(String line) {
 		if (line.contains("?") && !line.endsWith("?")) {
 			String directoryName = splitRequest(line);
-			String directory = page.getMainDir(directoryName);
-			String index = page.createIndexPage(directory, false);
+			String directoryLink;
+			try {directoryLink = page.getMainDir(directoryName);}
+			catch (Exception e) {return "Couldn't open!";}
+			String index = page.createIndexPage(directoryLink, false);
 			return index;
 		} else if (line.startsWith("GET /style.css")) {
 			String indexCSS = page.readFile("style.css");
