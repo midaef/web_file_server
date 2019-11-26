@@ -8,11 +8,13 @@ public class Page {
 
 	private ArrayList<String> dirList = new ArrayList<>();
 	private String index = "";
+	private File dir;
 
 	public Page() {}
 
 	public String createIndexPage(String directory, Boolean isMainDirectory) {
 		index = readFile("index.html");
+		isEmptyDirectory(directory);
 		addButtonToPage(isMainDirectory);
 		addDirectoryToPage(directory);
 		dirList.clear();
@@ -20,16 +22,20 @@ public class Page {
 	}
 
 	private void addDirectoryToPage(String directory) {
-		int count = 0;
-		for (String i : dirList) {
-			count++;
-			if (dirList.size() != count) {
-				index = index.replace("&file&", "<a href=\"javascript:void(0);\">" +
-						"<span class=\"open-dir\">" + i + "</span></a>&file&")
-						.replace("&title&", getUserName())
-						.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
+		for (int i = 0; i < dirList.size(); i++) {
+			index = index.replace("&file&", "<a href=\"javascript:void(0);\">" +
+					"<span class=\"open-dir\">" + dirList.get(i) + "</span></a>&file&")
+					.replace("&title&", getUserName())
+					.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
+		}
+		index = index.replace("&file&", "");
+	}
 
-			} else index = index.replace("&file&", "");
+	private void isEmptyDirectory(String directory) {
+		if (dirList.isEmpty()) {
+			index = index.replace("&file&", "<h3>Directory is empty</h3>")
+					.replace("&path&", "<h3>" + directory + "</h3>")
+					.replace("&title&", getUserName());
 		}
 	}
 
@@ -61,7 +67,6 @@ public class Page {
 		String OS = "";
 		OS = System.getProperty("os.name");
 		String userName = getUserName();
-		File dir;
 		if (OS.startsWith("Mac")) dir = new File("/Users/" + userName + "/" + directory);
 		else dir = new File("C:\\Users\\" + userName + "/" + directory);
 		for (File file : dir.listFiles()) {
@@ -70,12 +75,7 @@ public class Page {
 				dirList.add(file.getName());
 			}
 		}
-		if (!fileIsEmpty(dir)) return dir.getPath();
-		return "";
-	}
-
-	private Boolean fileIsEmpty(File dir) {
-		return dir.getPath().isEmpty();
+		return dir.getPath();
 	}
 
 }

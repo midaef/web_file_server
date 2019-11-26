@@ -18,17 +18,20 @@ public class Server {
 	public void start() {
 		try {
 			InetAddress address = InetAddress.getByName("::1");
-			ServerSocket serverSocket = new ServerSocket(52225, 50, address);
+			ServerSocket serverSocket = new ServerSocket(65000, 50, address);
 			System.out.println("[SERVER STARTED]");
-			//try {serverSocket = new ServerSocket(52225);} catch (Exception e) {} It's not local
+//			try {serverSocket = new ServerSocket(65000);} catch (Exception e) {}
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String line = reader.readLine().split("\n")[0].replace(" HTTP/1.1", "");
-					parser(line, socket);
-					String request = parser(line, socket);
-					sendRequest(socket, request);
-				} catch (Exception ignored) {}
+					String line = reader.readLine();
+					if (line != null) {
+						line = line.split("\n")[0].replace(" HTTP/1.1", "");
+						parser(line, socket);
+						String request = parser(line, socket);
+						sendRequest(socket, request);
+					}
+				} catch (Exception ignored) {ignored.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
 	}
