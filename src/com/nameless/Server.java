@@ -37,9 +37,12 @@ public class Server {
 	private String parser(String line) {
 		if (line.contains("?") && !line.endsWith("?")) {
 			String directoryName = splitRequest(line);
-			String directoryLink;
+			String directoryLink = "";
 			try {directoryLink = page.getMainDir(directoryName);}
-			catch (Exception e) {return "Couldn't open!";}
+			catch (Exception e) {return "Couldn't open!"; }
+			if (!page.getFormatFile(directoryName).isEmpty()) {
+				return page.openFile(page.getFormatFile(directoryName) ,directoryLink);
+			}
 			String index = page.createIndexPage(directoryLink, false);
 			return index;
 		} else if (line.startsWith("GET /style.css")) {
@@ -59,8 +62,8 @@ public class Server {
 		String[] request = line.split("\\?");
 		String directoryName = "";
 		for (String str : request) {
-			directoryName += str.replace("dir=", "").replace("GET /", "")
-					.replace("%20", " ") + "/";
+			directoryName += "/" + str.replace("dir=", "").replace("GET /", "")
+					.replace("%20", " ") ;
 		}
 		return directoryName;
 	}

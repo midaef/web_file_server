@@ -63,12 +63,39 @@ public class Page {
 		return System.getProperty("user.name");
 	}
 
+	public String getFormatFile(String directoryName) {
+		String[] formatList = {".txt", ".png", ".jpg", ".gif", ".bmp"};
+		for (String format : formatList) {
+			if (directoryName.endsWith(format)) {
+				return format;
+			}
+		}
+		return "";
+	}
+
+	public String openFile(String format, String directoryLink) {
+		switch (format) {
+			case (".txt"):
+				return readFile(directoryLink);
+			case (".png"):
+				return "";
+			case (".jpg"):
+				return "";
+			case (".gif"):
+				return "";
+			case (".bmp"):
+				return "";
+		}
+		return "";
+	}
+
 	public String getMainDir(String directory) {
 		String OS = "";
 		OS = System.getProperty("os.name");
 		String userName = getUserName();
 		if (OS.startsWith("Mac")) dir = new File("/Users/" + userName + "/" + directory);
 		else dir = new File("C:\\Users\\" + userName + "/" + directory);
+		if (!getFormatFile(directory).isEmpty()) return dir.getPath();
 		for (File file : dir.listFiles()) {
 			if (!file.getName().startsWith(".") && !dirList.contains(file.getName())
 				&& !file.getName().startsWith("ntuser") && !file.getName().startsWith("NTUSER")) {
