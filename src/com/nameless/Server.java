@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server extends Thread {
 
 	private Boolean shutdown = false;
 	private Page page = new Page();
@@ -27,7 +27,11 @@ public class Server {
 					if (line != null) {
 						line = line.split("\n")[0].replace(" HTTP/1.1", "");
 						String request = parser(line);
-						sendRequest(socket, request);
+						Runnable task = () -> {
+							sendRequest(socket, request);
+						};
+						Thread thread = new Thread(task);
+						task.run();
 					}
 				} catch (Exception e) {e.printStackTrace();}
 			}
@@ -39,12 +43,11 @@ public class Server {
 			String directoryName = splitRequest(line);
 			String directoryLink = "";
 			try {directoryLink = page.getMainDir(directoryName);}
-			catch (Exception e) {return "Couldn't open!"; }
+			catch (Exception e) {return "Couldn't open!";}
 			if (!page.getFormatFile(directoryName).isEmpty()) {
 				return page.openFile(page.getFormatFile(directoryName) ,directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
-			System.out.println(directoryLink);
 			return index;
 		} else if (line.startsWith("GET /style.css")) {
 			String indexCSS = page.readFile("style.css");

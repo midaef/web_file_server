@@ -2,9 +2,7 @@ package com.nameless;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Scanner;
@@ -53,14 +51,30 @@ public class Page {
 	}
 
 	public String readFile(String fileName) {
+//		String txt = "";
+//		try {
+//			File file = new File(fileName);
+//			Scanner sc = new Scanner(file);
+//			while (sc.hasNextLine()) {
+//				txt += sc.nextLine() + "\n";
+//			}
+//		} catch (Exception e) {e.printStackTrace();}
+//		return txt;
 		String txt = "";
 		try {
 			File file = new File(fileName);
-			Scanner sc = new Scanner(file);
-			while (sc.hasNextLine()) {
-				txt += sc.nextLine() + "\n";
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line;
+			while((line = bufferedReader.readLine()) != null) {
+				txt += line + "\n";
 			}
-		} catch (Exception e) {e.printStackTrace();}
+
+			bufferedReader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(txt);
 		return txt;
 	}
 
@@ -69,7 +83,9 @@ public class Page {
 	}
 
 	public String getFormatFile(String directoryName) {
-		String[] formatList = {".txt", ".png", ".jpg", ".gif", ".bmp", ".html"};
+		String[] formatList = {".txt", ".xml", ".log", ".bat", ".cmd", ".py", ".acp", ".acpx", ".cfg", ".css", ".js",
+				".html", ".htm", ".php", ".xhtml", ".c", ".cpp", ".cs", ".h", ".sh", ".java", ".swift", ".vb", ".ini",
+				".png", ".jpg", ".gif", ".bmp"};
 		for (String format : formatList) {
 			if (directoryName.endsWith(format)) {
 				return format;
@@ -80,7 +96,11 @@ public class Page {
 
 	public String openFile(String format, String directoryLink) {
 		String[] imageFormat = {".png", ".jpg", ".gif", ".bmp"};
-		if (format.equals(".txt") || format.equals(".html")) return readFile(directoryLink);
+		String[] textFormat = {".txt", ".xml", ".log", ".bat", ".cmd", ".py", ".acp", ".acpx", ".cfg", ".css", ".js",
+				".html", ".htm", ".php", ".xhtml", ".c", ".cpp", ".cs", ".h", ".sh", ".java", ".swift", ".vb", ".ini"};
+		for (String text : textFormat) {
+			if (format.equals(text)) return readFile(directoryLink);
+		}
 		for (String image : imageFormat) {
 			if (format.equals(image)) {
 				String src = "data:" + "image/" +
