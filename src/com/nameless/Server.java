@@ -44,6 +44,7 @@ public class Server {
 				return page.openFile(page.getFormatFile(directoryName) ,directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
+			System.out.println(directoryLink);
 			return index;
 		} else if (line.startsWith("GET /style.css")) {
 			String indexCSS = page.readFile("style.css");

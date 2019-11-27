@@ -1,7 +1,12 @@
 package com.nameless;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Scanner;
 
 public class Page {
@@ -64,7 +69,7 @@ public class Page {
 	}
 
 	public String getFormatFile(String directoryName) {
-		String[] formatList = {".txt", ".png", ".jpg", ".gif", ".bmp"};
+		String[] formatList = {".txt", ".png", ".jpg", ".gif", ".bmp", ".html"};
 		for (String format : formatList) {
 			if (directoryName.endsWith(format)) {
 				return format;
@@ -74,19 +79,27 @@ public class Page {
 	}
 
 	public String openFile(String format, String directoryLink) {
-		switch (format) {
-			case (".txt"):
-				return readFile(directoryLink);
-			case (".png"):
-				return "";
-			case (".jpg"):
-				return "";
-			case (".gif"):
-				return "";
-			case (".bmp"):
-				return "";
+		String[] imageFormat = {".png", ".jpg", ".gif", ".bmp"};
+		if (format.equals(".txt") || format.equals(".html")) return readFile(directoryLink);
+		for (String image : imageFormat) {
+			if (format.equals(image)) {
+				String src = "data:" + "image/" +
+						format.replace(".", "") + ";" + "base64," + openImage(directoryLink, format);
+				return "<html><img src=\"" + src + "\"/></html>";
+			}
 		}
 		return "";
+	}
+
+	private String openImage(String directoryLink, String format) {
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			BufferedImage bufferedImage = ImageIO.read(new File(directoryLink));
+			ImageIO.write(bufferedImage, format.replace(".", "") , outputStream);
+			return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+		} catch (IOException e) {
+			return "Couldn't open!";
+		}
 	}
 
 	public String getMainDir(String directory) {
