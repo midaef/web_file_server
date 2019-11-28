@@ -6,33 +6,31 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends Thread {
+public class Server {
 
 	private Boolean shutdown = false;
 	private Page page = new Page();
+	private Integer port;
 
-	public Server() {
+	public Server(Integer port) {
+		this.port = port;
 		start();
 	}
 
 	public void start() {
 		try {
 			InetAddress address = InetAddress.getByName("::");
-			ServerSocket serverSocket = new ServerSocket(65000, 50, address);
+			ServerSocket serverSocket = new ServerSocket(port, 50, address);
 			System.out.println("[SERVER STARTED]");
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String line = reader.readLine();
-					if (line != null) {
+					try {
+						String line = reader.readLine();
 						line = line.split("\n")[0].replace(" HTTP/1.1", "");
 						String request = parser(line);
-						Runnable task = () -> {
-							sendRequest(socket, request);
-						};
-						Thread thread = new Thread(task);
-						task.run();
-					}
+						sendRequest(socket, request);
+					} catch (Exception e) {e.printStackTrace();}
 				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
@@ -42,10 +40,10 @@ public class Server extends Thread {
 		if (line.contains("?") && !line.endsWith("?")) {
 			String directoryName = splitRequest(line);
 			String directoryLink = "";
-			try {directoryLink = page.getMainDir(directoryName);}
-			catch (Exception e) {return "Couldn't open!";}
+			try {directoryLink = page.getMainDir(directoryName);
+			} catch (Exception e) {return "Couldn't open!";}
 			if (!page.getFormatFile(directoryName).isEmpty()) {
-				return page.openFile(page.getFormatFile(directoryName) ,directoryLink);
+				return page.openFile(page.getFormatFile(directoryName), directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
 			return index;

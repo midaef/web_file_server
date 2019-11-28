@@ -2,10 +2,13 @@ package com.nameless;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Scanner;
 
 public class Page {
 
@@ -51,15 +54,6 @@ public class Page {
 	}
 
 	public String readFile(String fileName) {
-//		String txt = "";
-//		try {
-//			File file = new File(fileName);
-//			Scanner sc = new Scanner(file);
-//			while (sc.hasNextLine()) {
-//				txt += sc.nextLine() + "\n";
-//			}
-//		} catch (Exception e) {e.printStackTrace();}
-//		return txt;
 		String txt = "";
 		try {
 			File file = new File(fileName);
@@ -69,12 +63,10 @@ public class Page {
 			while((line = bufferedReader.readLine()) != null) {
 				txt += line + "\n";
 			}
-
 			bufferedReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(txt);
 		return txt;
 	}
 
@@ -123,8 +115,7 @@ public class Page {
 	}
 
 	public String getMainDir(String directory) {
-		String OS = "";
-		OS = System.getProperty("os.name");
+		String OS = System.getProperty("os.name");
 		String userName = getUserName();
 		if (OS.startsWith("Mac")) dir = new File("/Users/" + userName + "/" + directory);
 		else dir = new File("C:\\Users\\" + userName + "/" + directory);
