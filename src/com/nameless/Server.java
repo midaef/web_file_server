@@ -51,12 +51,6 @@ public class Server {
 			}
 			String index = page.createIndexPage(directoryLink, false);
 			return index;
-		} else if (line.startsWith("GET /style.css")) {
-			String indexCSS = page.readFile("style.css");
-			return indexCSS;
-		} else if (line.startsWith("GET /script.js")) {
-			String scriptJS = page.readFile("script.js");
-			return scriptJS;
 		} else if (line.equals("GET /")) {
 			String directory = page.getMainDir("");
 			return page.createIndexPage(directory, true);

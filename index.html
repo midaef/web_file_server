@@ -3,8 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>&title&</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="script.js"></script>
 </head>
 <body>
 	<div class="path">&path&</div>
@@ -13,5 +11,58 @@
 		&button&
 		<br>&file&
 	</div>
+	<script type="text/javascript">
+		window.onload = function() {
+			var i, list = document.getElementsByClassName("open-dir");
+			for (i = 0; i < list.length; ++i) {
+				list[i].addEventListener('click', function() {
+					dirName = this.innerHTML;
+					var xmlHttp = new XMLHttpRequest();
+					var currentLocation = window.location.href;
+					currentLocation = currentLocation + "?dir=" + dirName;
+					window.location.href = currentLocation;
+				}, false);
+			}
+		};
+
+		function toDir() {
+			window.history.back(1);
+		}
+	</script>
+	<style type="text/css">
+		.dir a {
+			color: black;
+			text-decoration:none;
+			padding-top: 12px;
+			margin-left: 50px;
+			font-size: 23px;
+			display: block;
+		}
+
+		.dir a:hover {
+			color: #95500c;
+		}
+
+		.dir h3 {
+			margin-left: 50px;
+			font-size: 24px;
+		}
+
+		.path h3 {
+			color: #2c3136;
+			margin-left: 50px;
+			font-size: 25px;
+		}
+
+		.button-up {
+			margin-left: 50px;
+		}
+
+		.dir h3 {
+			color: #2c3136;
+			margin-left: 50px;
+			font-size: 25px;
+		}
+	</style>
 </body>
 </html>
