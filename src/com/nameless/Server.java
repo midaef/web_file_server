@@ -5,15 +5,19 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Server {
 
 	private Boolean shutdown = false;
 	private Page page = new Page();
 	private Integer port;
+	private String password;
+	private HashMap<String, String> users = new HashMap<>();
 
-	public Server(Integer port) {
+	public Server(Integer port, String password) {
 		this.port = port;
+		this.password = password;
 		start();
 	}
 
@@ -25,12 +29,12 @@ public class Server {
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					try {
 						String line = reader.readLine();
-						line = line.split("\n")[0].replace(" HTTP/1.1", "");
-						String request = parser(line);
-						sendRequest(socket, request);
-					} catch (Exception e) {e.printStackTrace();}
+						if (line != null) {
+							line = line.split("\n")[0].replace(" HTTP/1.1", "");
+							String request = parser(line);
+							sendRequest(socket, request);
+						}
 				} catch (Exception e) {e.printStackTrace();}
 			}
 		} catch (Exception e) {e.printStackTrace();}
