@@ -38,7 +38,7 @@ public class Server {
 					String clientIP = getClientIP(socket);
 					if (line != null) {
 						String token = createToken(clientIP, reader);
-						Boolean isLogin = parseLogin(line, token);
+						Boolean isLogin = login(line, token, socket);
 						if (isLogin) {
 							line = line.split("\n")[0].replace(" HTTP/1.1", "");
 							String request = parser(line);
@@ -75,13 +75,20 @@ public class Server {
 		return "";
 	}
 
-	private Boolean parseLogin(String request, String token) {
-		if (request.contains("entry=") && !users.containsKey(token)) {
-			String req = request.split("=")[1].split(" ")[0];
-			String pass = req.split("/")[1];
-			if (pass.equals(password)) {
-				users.put(token, req.split("/")[0]);
-				return true;
+	private String getPasswordAndLogin(String line) {
+		String req[] = line.split("=");
+		String data = req[req.length-1].replace("/ HTTP/1.1", "");
+		return data;
+	}
+
+	private Boolean login(String line, String token, Socket socket) {
+		if (!users.containsKey(token)) {
+			if (line.contains("entry=")) {
+				String req = getPasswordAndLogin(line);
+				if (req.split("/")[1].equals(password)) {
+					users.put(token, req.split("/")[0]);
+					return true;
+				} else return false;
 			} else return false;
 		}
 		return true;
@@ -92,17 +99,21 @@ public class Server {
 	}
 
 	private String parser(String line) {
-		if (line.contains("?") && !line.endsWith("?")) {
+		if (line.contains("dir=")) {
 			String directoryName = splitRequest(line);
 			String directoryLink = "";
-			try {directoryLink = page.getMainDir(directoryName);
-			} catch (Exception e) {return "Couldn't open!";}
+			try {
+				directoryLink = page.getMainDir(directoryName);
+			} catch (Exception e) {
+				return "Couldn't open!";
+			}
 			if (!page.getFormatFile(directoryName).isEmpty()) {
 				return page.openFile(page.getFormatFile(directoryName), directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
 			return index;
-		} else if (line.equals("GET /")) {
+		}
+		else if (line.equals("GET /") || line.contains("entry")) {
 			String directory = page.getMainDir("");
 			return page.createIndexPage(directory, true);
 		}
@@ -113,10 +124,12 @@ public class Server {
 		String[] request = line.split("\\?");
 		String directoryName = "";
 		for (String str : request) {
-			directoryName += "/" + str.replace("dir=", "").replace("GET /", "")
-					.replace("%20", " ") ;
+				directoryName += "/" + str.replace("dir=", "").replace("GET /", "")
+						.replace("%20", " ");
 		}
-		return directoryName;
+		String[] data = {};
+		if (directoryName.contains(password + "//")) data = directoryName.split("//");
+		return data[data.length-1];
 	}
 
 	private void sendRequest(Socket socket, String req) {
