@@ -97,7 +97,7 @@ public class Page {
 			if (format.equals(image)) {
 				String src = "data:" + "image/" +
 						format.replace(".", "") + ";" + "base64," + openImage(directoryLink, format);
-				return "<html><img src=\"" + src + "\"/></html>";
+				return readFile("img.html").replace("&src&", src);
 			}
 		}
 		return "";

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<button id="download">Download</button>
+	<img id="pic" src="&src&"/>
+	<script type="text/javascript">
+		document.getElementById('download').onclick = function download() {
+			var url = window.location.href;
+			let data = url.split("/");
+			var myFile = data[data.length-1].replace("?dir=", "");
+			console.log(myFile);
+			var src = $('#pic').attr('src');
+			var img = document.createElement("a");
+			img.href = src;
+			img.download = myFile;
+    		img.click()
+		}
+	</script>
+</body>
+</html>
