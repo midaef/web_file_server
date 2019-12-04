@@ -20,7 +20,7 @@ public class Page {
 
 	public String createIndexPage(String directory, Boolean isMainDirectory) {
 		index = readFile("index.html");
-		isEmptyDirectory(directory);
+		getEmptyDirectory(directory);
 		addButtonToPage(isMainDirectory);
 		addDirectoryToPage(directory);
 		dirList.clear();
@@ -29,15 +29,27 @@ public class Page {
 
 	private void addDirectoryToPage(String directory) {
 		for (int i = 0; i < dirList.size(); i++) {
-			index = index.replace("&file&", "<a href=\"javascript:void(0);\">" +
-					"<span class=\"open-dir\">" + dirList.get(i) + "</span></a>&file&")
+			index = index.replace("&file&", "<tr>&icon&<td><a href=\"javascript:void(0);\">" +
+					"<span class=\"open-dir\">" + dirList.get(i) + "</span></a>&file&</td></tr>")
 					.replace("&title&", getUserName())
 					.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
+			setIcon(directory, i);
 		}
 		index = index.replace("&file&", "");
 	}
 
-	private void isEmptyDirectory(String directory) {
+	private void setIcon(String directory, int count) {
+		dir = new File(directory + "/" + dirList.get(count));
+		if (dir.isDirectory()) {
+			index = index.replace("&icon&",
+					"<td><img src=\"" + readFile("folder_icon.txt") + "\"></td>");
+		} else {
+			index = index.replace("&icon&",
+					"<td><img src=\"" + readFile("file_icon.txt") + "\"></td>");
+		}
+	}
+
+	private void getEmptyDirectory(String directory) {
 		if (dirList.isEmpty()) {
 			index = index.replace("&file&", "<h3>Directory is empty</h3>")
 					.replace("&path&", "<h3>" + directory + "</h3>")
@@ -97,8 +109,8 @@ public class Page {
 			if (format.equals(image)) {
 				String dataImage = openImage(directoryLink, format);
 				String base64 = dataImage.split(":img:")[1];
-				Integer width = Integer.parseInt(dataImage.split(":img:")[0].split("/")[0]) / 2;
-				Integer height = Integer.parseInt(dataImage.split(":img:")[0].split("/")[1]) / 2;
+				Integer width = Integer.parseInt(dataImage.split(":img:")[0].split("/")[0]) / 4;
+				Integer height = Integer.parseInt(dataImage.split(":img:")[0].split("/")[1]) / 4;
 				String src = "data:" + "image/" +
 						format.replace(".", "") + ";" + "base64," + base64;
 				return readFile("img.html").replace("&src&", src)
@@ -129,7 +141,7 @@ public class Page {
 		if (!getFormatFile(directory).isEmpty()) return dir.getPath();
 		for (File file : dir.listFiles()) {
 			if (!file.getName().startsWith(".") && !dirList.contains(file.getName())
-				&& !file.getName().startsWith("ntuser") && !file.getName().startsWith("NTUSER")) {
+					&& !file.getName().startsWith("ntuser") && !file.getName().startsWith("NTUSER")) {
 				dirList.add(file.getName());
 			}
 		}

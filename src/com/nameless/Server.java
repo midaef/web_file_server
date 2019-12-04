@@ -111,6 +111,7 @@ public class Server {
 				return page.openFile(page.getFormatFile(directoryName), directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
+			System.out.println(directoryLink);
 			return index;
 		}
 		else if (line.equals("GET /") || line.contains("entry")) {
@@ -129,6 +130,7 @@ public class Server {
 		}
 		String[] data = {};
 		if (directoryName.contains(password + "//")) data = directoryName.split("//");
+		else if (data.length == 0) return directoryName;
 		return data[data.length-1];
 	}
 
