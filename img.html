@@ -4,8 +4,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-	<button id="download">Download</button>
-	<img id="pic" src="&src&"/>
+	<div class="button">
+		<button id="download">Download</button>
+		<input type="button" value="UP" onclick="toDir()" class="button-up">
+	</div>
+	<div class="img"><img id="pic" src="&src&" width="&width&px" height="&height&px" /></div>
 	<script type="text/javascript">
 		document.getElementById('download').onclick = function download() {
 			var url = window.location.href;
@@ -15,9 +18,17 @@
 			var src = $('#pic').attr('src');
 			var img = document.createElement("a");
 			img.href = src;
-			img.download = myFile;
+			img.download = "file.jpg";
     		img.click()
 		}
+		function toDir() {
+			window.history.back(1);
+		}
 	</script>
+	<style type="text/css">
+		.button {
+
+		}
+	</style>
 </body>
 </html>

@@ -95,9 +95,14 @@ public class Page {
 		}
 		for (String image : imageFormat) {
 			if (format.equals(image)) {
+				String dataImage = openImage(directoryLink, format);
+				String base64 = dataImage.split(":img:")[1];
+				Integer width = Integer.parseInt(dataImage.split(":img:")[0].split("/")[0]) / 2;
+				Integer height = Integer.parseInt(dataImage.split(":img:")[0].split("/")[1]) / 2;
 				String src = "data:" + "image/" +
-						format.replace(".", "") + ";" + "base64," + openImage(directoryLink, format);
-				return readFile("img.html").replace("&src&", src);
+						format.replace(".", "") + ";" + "base64," + base64;
+				return readFile("img.html").replace("&src&", src)
+						.replace("&width&", width.toString()).replace("&height&", height.toString());
 			}
 		}
 		return "";
@@ -108,7 +113,9 @@ public class Page {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			BufferedImage bufferedImage = ImageIO.read(new File(directoryLink));
 			ImageIO.write(bufferedImage, format.replace(".", "") , outputStream);
-			return Base64.getEncoder().encodeToString(outputStream.toByteArray());
+			Integer width = bufferedImage.getWidth();
+			Integer height = bufferedImage.getHeight();
+			return width + "/" + height + ":img:" + Base64.getEncoder().encodeToString(outputStream.toByteArray());
 		} catch (IOException e) {
 			return "Couldn't open!";
 		}

@@ -5,15 +5,15 @@
 	<title>Login</title>
 </head>
 <body>
-	<div class="login">
+	<h2 id="title">Web file server</h2>
+	<div class="form">
+		<h3>Login:</h3>
 		<input type='text' name="login" id="login">
-	</div>
-	<div class="password">
+		<h3>Password:</h3>
 		<input type='password' name="pass" id="password">
+		<div><button id="entry">Entry</button></div>
 	</div>
-	<div class="entry">
-		<button id="entry">Entry</button>
-	</div>
+	<h3 id="github"><a href="https://github.com/midaef/web_file_server">project on GitHub</a></h3>
 	<script type="text/javascript">
 		document.getElementById('entry').onclick = function entry(){
 			var login = document.getElementById('login').value;
@@ -27,7 +27,38 @@
 		}
 	</script>
 	<style type="text/css">
-		* {margin: 5px;}
+		.form {
+			padding: 30px;
+			padding-top: 5px;
+			border: 2px solid #DBE9E5;
+			position: fixed; 
+			top: 20%; 
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			display: table;
+			background-color: #DBE9E5;
+		}
+		#login {
+			background-color: #ffe;
+			color: #930;
+		}
+		#password {
+			background-color: #ffe;
+			color: #930;
+		}
+		#entry {
+			margin-top: 20px;
+			vertical-align: center;
+		}
+		#title {text-align: center;}
+		#github {
+			margin: 270px;
+			text-align: center;
+			text-decoration: none;
+		}
+		a {text-decoration: none;} 
 	</style>
 </body>
 </html>
