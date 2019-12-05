@@ -111,7 +111,6 @@ public class Server {
 				return page.openFile(page.getFormatFile(directoryName), directoryLink);
 			}
 			String index = page.createIndexPage(directoryLink, false);
-			System.out.println(directoryLink);
 			return index;
 		}
 		else if (line.equals("GET /") || line.contains("entry")) {

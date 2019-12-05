@@ -52,7 +52,11 @@ public class Page {
 
 	private void setSize(String directory, int count) {
 		dir = new File(directory + "/" + dirList.get(count));
-		index = index.replace("&size&", "<td>" + dir.length() / 1024 + " KB</td>");
+		if (dir.isFile()) {
+			index = index.replace("&size&", "<td>" + dir.length() / 1024 + " KB</td>");
+		} else {
+			index = index.replace("&size&", "<td></td>");
+		}
 	}
 
 	private void getEmptyDirectory(String directory) {
