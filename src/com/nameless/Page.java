@@ -29,10 +29,11 @@ public class Page {
 
 	private void addDirectoryToPage(String directory) {
 		for (int i = 0; i < dirList.size(); i++) {
-			index = index.replace("&file&", "<tr>&icon&<td><a href=\"javascript:void(0);\">" +
-					"<span class=\"open-dir\">" + dirList.get(i) + "</span></a>&file&</td></tr>")
-					.replace("&title&", getUserName())
+			index = index.replace("&file&",
+					"<tr>&size&<td>&icon&<a href=\"javascript:void(0);\" class=\"open-dir\">" +
+					 dirList.get(i) + "</a>&file&</td></tr>").replace("&title&", getUserName())
 					.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
+			setSize(directory, i);
 			setIcon(directory, i);
 		}
 		index = index.replace("&file&", "");
@@ -42,16 +43,21 @@ public class Page {
 		dir = new File(directory + "/" + dirList.get(count));
 		if (dir.isDirectory()) {
 			index = index.replace("&icon&",
-					"<td><img src=\"" + readFile("folder_icon.txt") + "\"></td>");
+					"<img src=\"" + readFile("folder_icon.txt") + "\">");
 		} else {
 			index = index.replace("&icon&",
-					"<td><img src=\"" + readFile("file_icon.txt") + "\"></td>");
+					"<img src=\"" + readFile("file_icon.txt") + "\">");
 		}
+	}
+
+	private void setSize(String directory, int count) {
+		dir = new File(directory + "/" + dirList.get(count));
+		index = index.replace("&size&", "<td>" + dir.length() / 1024 + " KB</td>");
 	}
 
 	private void getEmptyDirectory(String directory) {
 		if (dirList.isEmpty()) {
-			index = index.replace("&file&", "<h3>Directory is empty</h3>")
+			index = index.replace("&file&", "<tr><td>Directory is empty</td></tr>")
 					.replace("&path&", "<h3>" + directory + "</h3>")
 					.replace("&title&", getUserName());
 		}
@@ -59,10 +65,10 @@ public class Page {
 
 	private void addButtonToPage(Boolean isMainDirectory) {
 		if (!isMainDirectory) {
-			index = index.replace("&button&",
-					"<input type=\"button\" value=\"UP\" onclick=\"toDir()\" class=\"button-up\">");
+			index = index.replace("&back-link&", "<a href=\"javascript:toDir();\">Parent directory</a>")
+					.replace("&back-link-src&", readFile("back_link_icon.txt"));
 		}
-		else index = index.replace("&button&", "");
+		else index = index.replace("&back-link&", "").replace("&back-link-src&", "");
 	}
 
 	public String readFile(String fileName) {
