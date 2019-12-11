@@ -10,13 +10,14 @@
 	<table>
 		<thead>
 			<tr>
+				<th></th>
 				<th>Size</th>
 				<th>Name</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr><th colspan="2"><hr></th></tr>
-			<tr><td></td><td><img src="&back-link-src&">&back-link&</td></tr>
+			<tr><th colspan="3"><hr></th></tr>
+			<tr><td></td><td></td><td><img src="&back-link-src&">&back-link&</td></tr>
 			&file&
 		</tbody>
 	</table>
@@ -33,9 +34,13 @@
 				}, false);
 			}
 		};
-
-		function toDir() {
-			window.history.back(1);
+		function toDir() {window.history.back(1);}
+		function downloadFile(file) {
+			var fileName = file;
+			var xmlHttp = new XMLHttpRequest();
+			var currentLocation = window.location.href;
+			currentLocation = currentLocation + "?download=" + fileName;
+			window.location.href = currentLocation;
 		}
 	</script>
 	<style type="text/css">
@@ -57,6 +62,9 @@
 		a {
 			text-decoration: none;
 			font-size: 20px;
+		}
+		a:hover {
+			color: black;
 		}
 		td {
 			padding-left: 15px;

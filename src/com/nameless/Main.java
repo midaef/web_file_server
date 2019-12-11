@@ -17,6 +17,8 @@ public class Main {
     }
 
     private static void settingsServer() {
+		System.out.println("Web file server v1.0");
+		System.out.println("GitHub: https://github.com/midaef/web_file_server");
 		System.out.print("Configure your server\nPort: ");
 		port = new Scanner(System.in).nextInt();
 		System.out.print("Password: ");

@@ -23,21 +23,34 @@ public class Page {
 		getEmptyDirectory(directory);
 		addButtonToPage(isMainDirectory);
 		addDirectoryToPage(directory);
-		dirList.clear();
+		clearDirectoryList();
 		return index;
 	}
 
 	private void addDirectoryToPage(String directory) {
 		for (int i = 0; i < dirList.size(); i++) {
 			index = index.replace("&file&",
-					"<tr>&size&<td>&icon&<a href=\"javascript:void(0);\" class=\"open-dir\">" +
+					"<tr>&download&&size&<td>&icon&<a href=\"javascript:void(0);\" class=\"open-dir\">" +
 					 dirList.get(i) + "</a>&file&</td></tr>").replace("&title&", getUserName())
 					.replace("&path&", "<h3>" + "Your directory: " + directory + "</h3>");
+			setDownloadLink(directory, i);
 			setSize(directory, i);
 			setIcon(directory, i);
 		}
 		index = index.replace("&file&", "");
 	}
+
+	private void setDownloadLink(String directory, int count) {
+		dir = new File(directory + "/" + dirList.get(count));
+		if (dir.isFile()) {
+			index = index.replace("&download&", "<td><a onClick=\"downloadFile('" +
+					dirList.get(count) + "')\"><img src=\"" + readFile("download_icon.txt") +"\"></a></td>");
+		} else {
+			index = index.replace("&download&", "<td></td>");
+		}
+	}
+
+	public void clearDirectoryList() {dirList.clear();}
 
 	private void setIcon(String directory, int count) {
 		dir = new File(directory + "/" + dirList.get(count));

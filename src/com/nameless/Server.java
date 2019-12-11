@@ -1,7 +1,11 @@
 package com.nameless;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -26,7 +30,7 @@ public class Server {
 		start();
 	}
 
-	public void start() {
+	private void start() {
 		try {
 			InetAddress address = InetAddress.getByName("::");
 			ServerSocket serverSocket = new ServerSocket(port, 50, address);
@@ -38,7 +42,7 @@ public class Server {
 					String clientIP = getClientIP(socket);
 					if (line != null) {
 						String token = createToken(clientIP, reader);
-						Boolean isLogin = login(line, token, socket);
+						Boolean isLogin = login(line, token);
 						if (isLogin) {
 							line = line.split("\n")[0].replace(" HTTP/1.1", "");
 							String request = parser(line);
@@ -81,7 +85,7 @@ public class Server {
 		return data;
 	}
 
-	private Boolean login(String line, String token, Socket socket) {
+	private Boolean login(String line, String token) {
 		if (!users.containsKey(token)) {
 			if (line.contains("entry=")) {
 				String req = getPasswordAndLogin(line);
@@ -99,9 +103,9 @@ public class Server {
 	}
 
 	private String parser(String line) {
-		if (line.contains("dir=")) {
-			String directoryName = splitRequest(line);
-			String directoryLink = "";
+		String directoryLink = "";
+		if (line.contains("dir=") && !line.contains("download=")) {
+			String directoryName = splitRequest(line, "dir=");
 			try {
 				directoryLink = page.getMainDir(directoryName);
 			} catch (Exception e) {
@@ -112,19 +116,28 @@ public class Server {
 			}
 			String index = page.createIndexPage(directoryLink, false);
 			return index;
-		}
-		else if (line.equals("GET /") || line.contains("entry")) {
+		} else if (line.contains("download=")) {
+			String filePath = splitRequest(line, "dir=").replace("download=", "")
+															.replace("//", "");
+			String path = page.getMainDir("") + "/" + filePath;
+			page.clearDirectoryList();
+			if (filePath.contains("/")) {
+				String[] data = filePath.split("/");
+				return path + "&" + data[data.length-1] + "&" + new File(path).length() + "&keyword=download";
+			}
+			return path + "&" + filePath + "&" + new File(path).length() + "&keyword=download";
+		} else if (line.equals("GET /") || line.contains("entry")) {
 			String directory = page.getMainDir("");
 			return page.createIndexPage(directory, true);
 		}
 		return "Page not found: 404";
 	}
 
-	private String splitRequest(String line) {
+	private String splitRequest(String line, String type) {
 		String[] request = line.split("\\?");
 		String directoryName = "";
 		for (String str : request) {
-				directoryName += "/" + str.replace("dir=", "").replace("GET /", "")
+				directoryName += "/" + str.replace(type, "").replace("GET /", "")
 						.replace("%20", " ");
 		}
 		String[] data = {};
@@ -133,11 +146,33 @@ public class Server {
 		return data[data.length-1];
 	}
 
+	private byte[] getBytes(String path) {
+		byte[] fileInArray = new byte[(int)new File(path).length()];
+		try {
+			FileInputStream f = new FileInputStream(path);
+			f.read(fileInArray);
+			return fileInArray;
+		} catch (Exception e) {e.printStackTrace();}
+		return fileInArray;
+	}
+
 	private void sendRequest(Socket socket, String req) {
 		try {
-			String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + req;
-			socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
-		} catch (Exception ignored) {}
+			String httpResponse = "HTTP/1.1 200 OK\r\n";
+			OutputStream outputStream = socket.getOutputStream();
+			PrintStream ps = new PrintStream(outputStream);
+			if (req.contains("keyword=download")) {
+				String data[] = req.split("&");
+				byte[] fileInArray = getBytes(data[0]);
+				ps.printf(httpResponse);
+				ps.print("Content-Disposition: form-data; name=\"myFile\"; filename=\"" + data[1] + "\"\r\n");
+				ps.printf("Content-Type: text/plain; charset=utf-8\r\n\r\n");
+				outputStream.write(fileInArray);
+			} else {
+				httpResponse+="\r\n" + req;
+				socket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
+			}
+		} catch (Exception e) {e.printStackTrace();}
 	}
 
 	private String getNowDate() {

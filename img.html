@@ -18,12 +18,10 @@
 			var src = $('#pic').attr('src');
 			var img = document.createElement("a");
 			img.href = src;
-			img.download = "file.jpg";
+			img.download = myFile;
     		img.click()
 		}
-		function toDir() {
-			window.history.back(1);
-		}
+		function toDir() {window.history.back(1);}
 	</script>
 	<style type="text/css">
 		.button {
