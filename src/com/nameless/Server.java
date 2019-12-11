@@ -109,7 +109,7 @@ public class Server {
 			try {
 				directoryLink = page.getMainDir(directoryName);
 			} catch (Exception e) {
-				return "Couldn't open!";
+				return page.createErrorPage();
 			}
 			if (!page.getFormatFile(directoryName).isEmpty()) {
 				return page.openFile(page.getFormatFile(directoryName), directoryLink);
@@ -130,7 +130,7 @@ public class Server {
 			String directory = page.getMainDir("");
 			return page.createIndexPage(directory, true);
 		}
-		return "Page not found: 404";
+		return page.createPageNotFound();
 	}
 
 	private String splitRequest(String line, String type) {

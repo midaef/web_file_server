@@ -105,6 +105,16 @@ public class Page {
 		return txt;
 	}
 
+	public String createPageNotFound() {
+		String page = readFile("404.html").replace("&cat&", readFile("cat.txt"));
+		return page;
+	}
+
+	public String createErrorPage() {
+		String page = readFile("error.html").replace("&cat&", readFile("cat.txt"));
+		return page;
+	}
+
 	private String getUserName() {
 		return System.getProperty("user.name");
 	}
@@ -152,7 +162,7 @@ public class Page {
 			Integer height = bufferedImage.getHeight();
 			return width + "/" + height + ":img:" + Base64.getEncoder().encodeToString(outputStream.toByteArray());
 		} catch (IOException e) {
-			return "Couldn't open!";
+			return createErrorPage();
 		}
 	}
 

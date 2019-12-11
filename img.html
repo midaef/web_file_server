@@ -14,12 +14,10 @@
 			var url = window.location.href;
 			let data = url.split("/");
 			var myFile = data[data.length-1].replace("?dir=", "");
-			console.log(myFile);
-			var src = $('#pic').attr('src');
-			var img = document.createElement("a");
-			img.href = src;
-			img.download = myFile;
-    		img.click()
+			var xmlHttp = new XMLHttpRequest();
+			var currentLocation = window.location.href;
+			currentLocation = currentLocation + "?download=" + myFile;
+			window.location.href = currentLocation;
 		}
 		function toDir() {window.history.back(1);}
 	</script>
