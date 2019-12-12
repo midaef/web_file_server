@@ -1,5 +1,7 @@
 # web file server
 
+![](https://img.shields.io/github/stars/midaef/web_file_server?style=social) [![](https://img.shields.io/badge/NameLess-Corporation-green)](https://github.com/NameLessCorporation) ![](https://img.shields.io/badge/JDK%20-10.0.1-blue) [![](https://img.shields.io/discord/416940275223625738?color=yellow)](https://discord.gg/tfanwYd) [![](https://img.shields.io/badge/Donate-web%20file%20server-orange)](https://qiwi.me/midaef)
+
 ## Description
 
 Web file server give you the ability to have permanent access to files on your computer.   
