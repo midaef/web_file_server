@@ -6,7 +6,6 @@ Web file server give you the ability to have permanent access to files on your c
 You can download and open file in your browserThis program can be use for your home PC or server.  
 Web file server give you the ability to have permanent access to files on your computer.  
 
-
 ## Warning
 
 The author of this program does not call for its use as malicious software.  
@@ -25,3 +24,20 @@ By the way, when you set-up port, you have to check port is not busy
 
 ## How to set-up port?
 This [website](https://www.wikihow.com/Set-Up-Port-Forwarding-on-a-Router) help you set-up port.
+
+## Screenshots::
+
+### Login
+![](https://raw.githubusercontent.com/midaef/web_file_server/master/docs/login.png)
+
+### Main
+![](https://raw.githubusercontent.com/midaef/web_file_server/master/docs/main.png)
+
+## Author
+
+Mikhailov Danil(midaef)
+
+## Donate for coffee
+
+We would be grateful if you would donate us a Cup of coffee)  
+Webmoney midaef: WMR R381836540599, WMZ Z286377765031  
