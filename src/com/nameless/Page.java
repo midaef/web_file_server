@@ -135,7 +135,7 @@ public class Page {
 	public String getFormatFile(String directoryName) {
 		String[] formatList = {".txt", ".xml", ".log", ".bat", ".cmd", ".py", ".acp", ".acpx", ".cfg", ".css", ".js",
 				".html", ".htm", ".php", ".xhtml", ".c", ".cpp", ".cs", ".h", ".sh", ".java", ".swift", ".vb", ".ini",
-				".png", ".jpg", ".gif", ".bmp"};
+				".png", ".jpg", ".gif", ".bmp", ".TXT"};
 		for (String format : formatList) {
 			if (directoryName.endsWith(format)) {
 				return format;
@@ -147,7 +147,7 @@ public class Page {
 	public String openFile(String format, String directoryLink) {
 		String[] imageFormat = {".png", ".jpg", ".gif", ".bmp"};
 		String[] textFormat = {".txt", ".xml", ".log", ".bat", ".cmd", ".py", ".acp", ".acpx", ".cfg", ".css", ".js",
-				".html", ".htm", ".php", ".xhtml", ".c", ".cpp", ".cs", ".h", ".sh", ".java", ".swift", ".vb", ".ini"};
+		".html", ".htm", ".php", ".xhtml", ".c", ".cpp", ".cs", ".h", ".sh", ".java", ".swift", ".vb", ".ini", ".TXT"};
 		for (String text : textFormat) {
 			if (format.equals(text)) return readFile(directoryLink);
 		}

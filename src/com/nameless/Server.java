@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 
 /**
@@ -56,6 +57,7 @@ public class Server {
 			InetAddress address = InetAddress.getByName("::");
 			ServerSocket serverSocket = new ServerSocket(port, 50, address);
 			System.out.println("[SERVER STARTED]-[" + getNowDate() + "]");
+			serverTask();
 			while (!shutdown) {
 				try (Socket socket = serverSocket.accept()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -74,6 +76,27 @@ public class Server {
 			}
 		} catch (Exception e) {e.printStackTrace();}
 		System.out.println("[Server stopped]-" + "[" + getNowDate() + "]");
+	}
+
+	private void serverTask() {
+		Runnable task = () -> {
+			while (!shutdown) {
+				System.out.print("\nCommands:\nexit - stop server\nusers - print users on server\n>>>");
+				String value = new Scanner(System.in).nextLine();
+				switch (value) {
+					case "exit":
+						System.out.println("[Server stopped]-" + "[" + getNowDate() + "]");
+						System.exit(1);
+					case "users":
+						for (String user : users.keySet()) {
+							System.out.println("User:" + users.get(user) + " | Token:" + user);
+						}
+						break;
+				}
+			}
+		};
+		Thread thread = new Thread(task);
+		thread.start();
 	}
 
 	private String createToken(String clientIP, BufferedReader reader) {
