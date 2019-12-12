@@ -25,7 +25,7 @@ By the way, when you set-up port, you have to check port is not busy
 ## How to set-up port?
 This [website](https://www.wikihow.com/Set-Up-Port-Forwarding-on-a-Router) help you set-up port.
 
-## Screenshots::
+## Screenshots
 
 ### Login
 ![](https://raw.githubusercontent.com/midaef/web_file_server/master/docs/login.png)
