@@ -16,6 +16,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
+
+/**
+ * This program can be use for your home PC or server.
+ * Web file server give you the ability to have permanent access to files on your computer.
+ * The author of this program does not call for its use as malicious software.
+ * Anyway the author does not bear any responsibility!
+ *
+ * @author Mikhailov Danil(midaef).
+ */
+
+/**
+ * This class use for start web file server.
+ * It's server can get request from browser and send to client.
+ * If you want to start the server in your PC
+ * You should to set the port in your router.
+ * Next, in the browser, connect in the format localhost(ip your PC):port
+ */
+
 public class Server {
 
 	private Boolean shutdown = false;
@@ -118,7 +136,7 @@ public class Server {
 			return index;
 		} else if (line.contains("download=")) {
 			String filePath = splitRequest(line, "dir=").replace("download=", "")
-															.replace("//", "");
+								.replace("//", "");
 			String path = page.getMainDir("") + "/" + filePath;
 			page.clearDirectoryList();
 			if (filePath.contains("/")) {

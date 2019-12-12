@@ -10,6 +10,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 
+/**
+ * This program can be use for your home PC or server.
+ * Web file server give you the ability to have permanent access to files on your computer.
+ * The author of this program does not call for its use as malicious software.
+ * Anyway the author does not bear any responsibility!
+ *
+ * @author Mikhailov Danil(midaef).
+ */
+
+/**
+ * This class use for create any page.
+ */
+
 public class Page {
 
 	private ArrayList<String> dirList = new ArrayList<>();
