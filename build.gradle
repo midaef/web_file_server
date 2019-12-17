@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+application {
+    mainClassName = "com.nameless.Main"
+}
+
+jar {
+	manifest {
+        attributes 'Main-Class': 'com.nameless.Main'
+    }
+    baseName = 'web_file_server'
+    version =  '0.1.0'
+}
