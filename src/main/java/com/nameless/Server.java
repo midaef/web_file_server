@@ -43,7 +43,6 @@ public class Server {
 	}
 
 	private void start() {
-
 		try {
 			InetAddress address = InetAddress.getByName("::");
 			try (ServerSocket serverSocket = new ServerSocket(port, 50, address)) {

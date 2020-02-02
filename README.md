@@ -6,8 +6,7 @@
 
 Web file server give you the ability to have permanent access to files on your computer.   
 You can download and open file in your browser.  
-This program can be use for your home PC or server.  
-Web file server give you the ability to have permanent access to files on your computer.  
+This program can be use for your home PC or server.    
 
 ## Warning
 
