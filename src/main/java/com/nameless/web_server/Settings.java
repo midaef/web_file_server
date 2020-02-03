@@ -24,6 +24,8 @@ public class Settings {
 	private String SERVER_PASSWORD = "";
 	private String ROOT_FOLDER = "";
 	private String ROOT_FILE = "";
+	private String WEB_FILE_SERVER = "";
+	private String WEB_SERVER = "";
 
 	public Settings() {
 		readProperties();
@@ -38,6 +40,8 @@ public class Settings {
 			SERVER_PASSWORD = property.getProperty("SERVER_PASSWORD");
 			ROOT_FILE = property.getProperty("ROOT_FILE");
 			ROOT_FOLDER = property.getProperty("ROOT_FOLDER");
+			WEB_SERVER = property.getProperty("WEB_SERVER");
+			WEB_FILE_SERVER = property.getProperty("WEB_FILE_SERVER");
 		} catch (IOException e) {
 			System.out.println("Config not found!");
 		}
@@ -48,5 +52,19 @@ public class Settings {
 	public String getPassword() {return SERVER_PASSWORD;}
 
 	public String getPath() {return ROOT_FOLDER + "/" + ROOT_FILE;}
+
+	public String getFolder() {return ROOT_FOLDER;}
+
+	public Integer getKeyWebServer() {
+		if (Integer.parseInt(WEB_SERVER) == 1) {
+			return 1;
+		} return 0;
+	}
+
+	public Integer getKeyWebFileServer() {
+		if (Integer.parseInt(WEB_FILE_SERVER) == 1) {
+			return 1;
+		} return 0;
+	}
 
 }

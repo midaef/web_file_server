@@ -16,8 +16,7 @@ package com.nameless.web_server;
 public class Main {
 
     public static void main(String[] args) {
-		Settings settings = new Settings();
-		new Server(Integer.parseInt(settings.getPort()), settings.getPassword(), settings.getPath());
+		new Server();
     }
 
 }

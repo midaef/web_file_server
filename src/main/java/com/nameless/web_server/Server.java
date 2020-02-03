@@ -33,16 +33,16 @@ public class Server {
 
 	private Boolean shutdown = false;
 	private Integer port;
-	private String password;
 	private HashMap<String, String> users = new HashMap<>();
+	private Settings settings = new Settings();
 
-	public Server(Integer port, String password, String ROOT_PATH) {
-		this.port = port;
-		this.password = password;
-		start(ROOT_PATH);
+	public Server() {
+		start();
+
 	}
 
-	private void start(String ROOT_PATH) {
+	private void start() {
+		port = Integer.parseInt(settings.getPort());
 		try {
 			InetAddress address = InetAddress.getByName("::");
 			try (ServerSocket serverSocket = new ServerSocket(port, 50, address)) {
@@ -50,7 +50,7 @@ public class Server {
 				serverTask();
 				while (!shutdown) {
 					Socket socket = serverSocket.accept();
-					Session session = new Session(socket, users, password, ROOT_PATH);
+					Session session = new Session(socket, users);
 					session.start();
 				}
 			} catch (Exception e) {e.printStackTrace();}

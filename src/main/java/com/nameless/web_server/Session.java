@@ -31,12 +31,13 @@ public class Session extends Thread {
 	private String password;
 	private Socket socket;
 	private String ROOT_PATH = "src/main/resources/control.html";
+	private Settings settings = new Settings();
 
-	public Session(Socket socket, HashMap<String, String> users, String password, String ROOT_PATH) {
-		this.password = password;
+	public Session(Socket socket, HashMap<String, String> users) {
+		this.password = settings.getPassword();
 		this.users = users;
 		this.socket = socket;
-		this.ROOT_PATH = ROOT_PATH;
+		this.ROOT_PATH = settings.getPath();
 	}
 
 	@Override
@@ -46,14 +47,16 @@ public class Session extends Thread {
 			String clientIP = getClientIP(socket);
 			if (line != null) {
 				String token = createToken(clientIP, reader);
-				if (line.contains("control.html")) {
-					Boolean isLogin = login(line, token);
-					if (isLogin) {
-						line = line.split("\n")[0].replace(" HTTP/1.1", "");
-						String request = parser(line);
-						sendRequest(socket, request);
-					} else sendRequest(socket, page.readFile("src/main/resources/control.html"));
-				} else sendRequest(socket, page.readFile(ROOT_PATH));
+				if (line.contains("control.html") || settings.getKeyWebServer() == 0) {
+					if (settings.getKeyWebFileServer() == 1) {
+						Boolean isLogin = login(line, token);
+						if (isLogin) {
+							line = line.split("\n")[0].replace(" HTTP/1.1", "");
+							String request = parser(line);
+							sendRequest(socket, request);
+						} else sendRequest(socket, page.readFile("src/main/resources/control.html"));
+					}
+				} else if (settings.getKeyWebServer() == 1) {sendRequest(socket, page.readFile(ROOT_PATH));}
 			}
 		} catch (Exception e) {e.printStackTrace();}
 	}
