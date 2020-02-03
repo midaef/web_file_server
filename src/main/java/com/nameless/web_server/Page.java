@@ -118,16 +118,8 @@ public class Page {
 		return txt;
 	}
 
-	public String createPageNotFound() {
-		String page = readFile("src/main/resources/404.html")
-								.replace("&cat&", readFile("src/main/resources/cat.txt"));
-		return page;
-	}
-
 	public String createErrorPage() {
-		String page = readFile("src/main/resources/error.html")
-								.replace("&cat&", readFile("src/main/resources/cat.txt"));
-		return page;
+		return readFile("src/main/resources/404.html");
 	}
 
 	private String getUserName() {

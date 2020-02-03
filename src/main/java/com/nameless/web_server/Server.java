@@ -21,12 +21,7 @@ import java.util.Scanner;
 /**
  * This class use for start web file server.
  * It's server can get request from browser and send to client.
- *	1. If you want to start the server in your PC
- *	2. You should to set-up the port in your router's settings.
- *	3. Start program and set port and password in config.properties
- *	4. Next, in the browser, connect in the format "localhost:port" or "ip:port".
- *	5. Input password and any login.
- * By the way, when you set-up port, you have to check port is not busy
+ * For online documentation and support please refer to https://github.com/midaef/web_file_server.
  */
 
 public class Server {

@@ -55,7 +55,7 @@ public class Session extends Thread {
 							String request = parser(line);
 							sendRequest(socket, request);
 						} else sendRequest(socket, page.readFile("src/main/resources/control.html"));
-					}
+					} else {sendRequest(socket, page.createErrorPage());}
 				} else if (settings.getKeyWebServer() == 1) {sendRequest(socket, page.readFile(ROOT_PATH));}
 			}
 		} catch (Exception e) {e.printStackTrace();}
